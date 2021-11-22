@@ -19,7 +19,6 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import static muramasa.antimatter.gui.ICanSyncData.SyncDirection.SERVER_TO_CLIENT;
 import static muramasa.gti.data.Materials.DistilledWater;
 
-
 public class TileEntityLargeTurbine extends TileEntityMultiMachine<TileEntityLargeTurbine> {
 
     /**
@@ -95,7 +94,7 @@ public class TileEntityLargeTurbine extends TileEntityMultiMachine<TileEntityLar
                             //Ignore the actual inserted amount a la multiblock.
                             if (!simulate) tile.energyHandler.ifPresent(handler -> {
                                 long eu = (long) (efficiency*activeRecipe.getPower()*finalConsumed/ recipeAmount);
-                                handler.insertInternal(eu, false, true);
+                                Utils.addEnergy(handler, eu);
                                 TileEntityLargeTurbine.this.lastEU = eu;
                             });
                             return true;
@@ -110,9 +109,9 @@ public class TileEntityLargeTurbine extends TileEntityMultiMachine<TileEntityLar
         int size = super.drawInfo(instance, stack, renderer, left, top);
         if (this.getMachineState() == MachineState.ACTIVE) {
             LargeTurbineWidget wid = (LargeTurbineWidget) instance;
-            renderer.drawString(stack, "Current: " + wid.currentConsumption + " mb/t", left, top + size, 16448255);
-            renderer.drawString(stack, "Optimal: " + wid.recommendedConsumption + " mb/t", left, top + size + 8, 16448255);
-            renderer.drawString(stack, "EU generation: " + wid.lastEU, left, top + size + 16, 16448255);
+            renderer.draw(stack, "Current: " + wid.currentConsumption + " mb/t", left, top + size, 16448255);
+            renderer.draw(stack, "Optimal: " + wid.recommendedConsumption + " mb/t", left, top + size + 8, 16448255);
+            renderer.draw(stack, "EU generation: " + wid.lastEU, left, top + size + 16, 16448255);
             return size + 24;
         }
         return size;
